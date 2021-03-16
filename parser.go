@@ -99,16 +99,16 @@ func (p Parser) Parse(spec string) (Schedule, error) {
 		strings.HasPrefix(spec, "CRON_TZ=UTC-"):
 		i := strings.Index(spec, " ")
 		eq := strings.Index(spec, "=")
-		nHour, err := strconv.Atoi(spec[eq+5 : i])
+		offsetMinute, err := strconv.Atoi(spec[eq+5 : i])
 		if err != nil {
 			return nil, fmt.Errorf("provided bad location %s: %v", spec[eq+1:i], err)
 		}
 
-		if nHour > 99 || nHour < -99 {
+		if offsetMinute > 5940 || offsetMinute < -5940 {
 			return nil, fmt.Errorf("provided bad location %s", spec[eq+1:i])
 		}
 
-		loc = time.FixedZone(spec[eq+1:i], 3600*nHour)
+		loc = time.FixedZone(spec[eq+1:i], 60*offsetMinute)
 		spec = strings.TrimSpace(spec[i:])
 	case strings.HasPrefix(spec, "TZ="),
 		strings.HasPrefix(spec, "CRON_TZ="):

@@ -151,14 +151,14 @@ func TestParseSchedule(t *testing.T) {
 		{standardParser, "CRON_TZ=UTC+0  5 * * * *", every5min(time.UTC)},
 		{standardParser, "CRON_TZ=UTC-0  5 * * * *", every5min(time.UTC)},
 		{secondParser, "CRON_TZ=Asia/Tokyo 0 5 * * * *", every5min(tokyo)},
-		{secondParser, "CRON_TZ=UTC+9 0 5 * * * *", every5min(tokyo)},
+		{secondParser, "CRON_TZ=UTC+540 0 5 * * * *", every5min(tokyo)},
 		{secondParser, "@every 5m", ConstantDelaySchedule{5 * time.Minute}},
 		{secondParser, "@midnight", midnight(time.Local)},
 		{secondParser, "TZ=UTC  @midnight", midnight(time.UTC)},
 		{secondParser, "TZ=UTC+0  @midnight", midnight(time.UTC)},
 		{secondParser, "TZ=UTC-0  @midnight", midnight(time.UTC)},
 		{secondParser, "TZ=Asia/Tokyo @midnight", midnight(tokyo)},
-		{secondParser, "TZ=UTC+9 @midnight", midnight(tokyo)},
+		{secondParser, "TZ=UTC+540 @midnight", midnight(tokyo)},
 		{secondParser, "@yearly", annual(time.Local)},
 		{secondParser, "@annually", annual(time.Local)},
 		{
@@ -179,7 +179,7 @@ func TestParseSchedule(t *testing.T) {
 	for _, c := range entries {
 		actual, err := c.parser.Parse(c.expr)
 		if err != nil {
-			t.Fatalf("%s => unexpected error %v", c.expr, err)
+			t.Fatalf("%s => unexpected error %+v", c.expr, err)
 		}
 
 		// specific check location's offset
